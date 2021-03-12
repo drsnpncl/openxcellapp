@@ -1,3 +1,4 @@
+var mongoose = require('mongoose')
 const Post = require('../models/post')
 
 const findAll = async () => {
@@ -10,7 +11,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try{
-        return await Post.findOne( { _id: id })
+        return await Post.findOne( { _id:  mongoose.Types.ObjectId(id) })
     } catch (err) {
         return { message: err.message }
     }
@@ -18,7 +19,7 @@ const findById = async (id) => {
 
 const findByUser = async (user) => {
     try{
-        return await Post.find({ user: user })
+        return await Post.find({ user:  mongoose.Types.ObjectId(user) })
     } catch (err) {
         return { message: err.message }
     }
@@ -26,7 +27,7 @@ const findByUser = async (user) => {
 
 const findByTopic = async (topic) => {
     try{
-        return await Post.find({ topic: topic })
+        return await Post.find({ topic:  mongoose.Types.ObjectId(topic) })
     } catch (err) {
         return { message: err.message }
     }
@@ -42,7 +43,7 @@ const create = async (post) => {
 
 const update = async (id, post) => {
     try{
-        return await Post.findByIdAndUpdate(id, post)
+        return await Post.findByIdAndUpdate( mongoose.Types.ObjectId(id), post)
     } catch (err) {
         return { message: err.message }
     }
@@ -50,7 +51,7 @@ const update = async (id, post) => {
 
 const deletePost = async (id) => {
     try{
-        return await Post.findByIdAndDelete(id)
+        return await Post.findByIdAndDelete( mongoose.Types.ObjectId(id))
     } catch (err) {
         return { message: err.message }
     }

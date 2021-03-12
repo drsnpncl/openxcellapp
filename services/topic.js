@@ -1,3 +1,4 @@
+var mongoose = require('mongoose')
 const Topic = require('../models/topic')
 
 const findAll = async () => {
@@ -10,15 +11,23 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try {
-        return await Topic.findOne({ _id: id })
+        return await Topic.findOne({ _id: mongoose.Types.ObjectId(id) })
     } catch(err) {
         return { message: err.message }
     }
 }
 
-const findByUserId = async (id) => {
+const findByUserId = async (user) => {
     try {
-        return await Topic.find({ user: user })
+        return await Topic.find({ user: mongoose.Types.ObjectId(user) })
+    } catch(err) {
+        return { message: err.message }
+    }
+}
+
+const checkOwnership = async (id, user) => {
+    try {
+        return await Topic.findOne({ _id: mongoose.Types.ObjectId(id), user: mongoose.Types.ObjectId(user) })
     } catch(err) {
         return { message: err.message }
     }
@@ -34,7 +43,7 @@ const create = async (topic) => {
 
 const update = async (id, topic) => {
     try {
-        return await Topic.findByIdAndUpdate(id, topic)
+        return await Topic.findByIdAndUpdate(mongoose.Types.ObjectId(id), topic)
     } catch(err) {
         return { message: err.message }
     }
@@ -42,10 +51,10 @@ const update = async (id, topic) => {
 
 const deleteTopic = async (id) => {
     try {
-        return await Topic.findByIdAndDelete(id)
+        return await Topic.findByIdAndDelete(mongoose.Types.ObjectId(id))
     } catch(err) {
         return { message: err.message }
     }
 }
 
-module.exports = { findAll, findById, findByUserId, create, update, deleteTopic }
+module.exports = { findAll, findById, findByUserId, checkOwnership, create, update, deleteTopic }

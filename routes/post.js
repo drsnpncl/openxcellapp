@@ -3,6 +3,7 @@ var router = express.Router();
 var { body, validationResult  } = require('express-validator'); 
 var passport = require('../passport')
 var Post = require('../services/post')
+var Topic =  require('../services/topic')
 
 router.get('/user/:id',
     passport.authenticate('basic', { session: false }),
@@ -78,14 +79,20 @@ router.post('/',
 			});
 			return res.status(400).json({ status: 'failure', message: errArray });
 		} else {
-            Post.create(req.body).then(post => {
-                if(post) {
-                    res.status(200).json(post)
+            Topic.checkOwnership(req.body.topic, req.body.user).then(topic => {
+                if(topic) {
+                    Post.create(req.body).then(post => {
+                        if(post) {
+                            res.status(200).json(post)
+                        } else {
+                            res.status(400).send('Post not created')
+                        }
+                    }).catch(err => {
+                        res.status(400).json(err)
+                    })            
                 } else {
-                    res.status(400).send('Post not created')
+                    res.status(400).json({ message: 'You are not authorized to post' })
                 }
-            }).catch(err => {
-                res.status(400).json(err)
             })
         }
     }

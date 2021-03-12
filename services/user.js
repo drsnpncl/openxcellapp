@@ -1,3 +1,4 @@
+var mongoose = require('mongoose')
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 
@@ -11,7 +12,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try{
-        return await User.findOne({ _id: id }, { password: 0 })
+        return await User.findOne({ _id: mongoose.Types.ObjectId(id) }, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -67,7 +68,7 @@ const create = async (user) => {
 const update = async (id, user) => {
     user.password = bcrypt.hashSync(user.password, 10)
     try{
-        return await User.findByIdAndUpdate(id, user)
+        return await User.findByIdAndUpdate(mongoose.Types.ObjectId(id), user)
     } catch(err) {
         return { message: err.message }
     }

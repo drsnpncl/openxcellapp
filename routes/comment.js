@@ -64,7 +64,7 @@ router.get('/',
     }
 )
 
-router.comment('/',
+router.post('/',
     body('post').not().isEmpty().withMessage('Post is required.'),
     body('user').not().isEmpty().withMessage('Unauthorized user. Please Login'),
     body('text').not().isEmpty().withMessage('Comment can not be blank.'),
