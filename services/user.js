@@ -43,7 +43,7 @@ const findByContact = async (contact) => {
 
 const authenticate = async (username, password) => {
     try{
-        var newPass = await User.findOne({ username: username }, { password: 1, _id: 0})
+        var newPass = await User.findOne({ username: username }, { password: 1, _id: 1})
         if(bcrypt.compareSync(password, newPass.password)) {
             return username;
         } else {
