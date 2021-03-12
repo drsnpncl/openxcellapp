@@ -1,8 +1,9 @@
 const User = require('../models/user')
+const bcrypt = require('bcryptjs')
 
 const findAll = async () => {
     try{
-        return await User.findAll().select({ password: 0 })
+        return await User.findAll({}, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -10,7 +11,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try{
-        return await User.findOne({ _id: id }).select({ password: 0 })
+        return await User.findOne({ _id: id }, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -18,7 +19,7 @@ const findById = async (id) => {
 
 const findByUsername = async (username) => {
     try{
-        return await User.findOne({ username: username }).select({ password: 0 })
+        return await User.findOne({ username: username }, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -26,7 +27,7 @@ const findByUsername = async (username) => {
 
 const findByEmail = async (email) => {
     try{
-        return await User.findOne({ email: email }).select({ password: 0 })
+        return await User.findOne({ email: email }, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -34,7 +35,7 @@ const findByEmail = async (email) => {
 
 const findByContact = async (contact) => {
     try{
-        return await User.findOne({ contact: contact }).select({ password: 0 })
+        return await User.findOne({ contact: contact }, { password: 0 })
     } catch(err) {
         return { message: err.message }
     }
@@ -42,13 +43,20 @@ const findByContact = async (contact) => {
 
 const authenticate = async (username, password) => {
     try{
-        return await User.findOne({ username: username, password }).select({ username: 1 })
+        var newPass = await User.findOne({ username: username }, { password: 1, _id: 0})
+        if(bcrypt.compareSync(password, newPass.password)) {
+            return username;
+        } else {
+
+            return { message: 'Incorrect password'}
+        }
     } catch(err) {
         return { message: err.message }
     }
 }
 
 const create = async (user) => {
+    user.password = bcrypt.hashSync(user.password, 10)
     try{
         return await User.create(user) 
     } catch(err) {
@@ -57,6 +65,7 @@ const create = async (user) => {
 }
 
 const update = async (id, user) => {
+    user.password = bcrypt.hashSync(user.password, 10)
     try{
         return await User.findByIdAndUpdate(id, user)
     } catch(err) {
