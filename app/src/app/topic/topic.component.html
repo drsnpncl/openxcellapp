@@ -1,1 +1,73 @@
-<p>topic works!</p>
+<div class="main-content" style="height: 100%; width: 100%;">
+    <div class="container-fluid" style="height: 100%; width: 100%;">
+      <div class="span"></div>
+      <div class="row">
+          <span class="col-md-4"></span>
+          <div class="col-md-4">
+            <form class="text-center">
+                <div class="row">
+                    <div class="col-md-9">
+                        <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Topic Title" [(ngModel)]="topic.title" name="topic.title" required>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-3">
+                        <button mat-raised-button type="submit" class="btn btn-danger" (click)="onCreate()">Create</button>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+          </div>
+
+      </div>
+      <div class="row" *ngIf="topics.length == 0">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">No topics found</h4>
+                </div>
+            </div>
+        </div>
+      </div>
+        <div class="row" *ngFor="let topic of topics">
+          <div class="col-md-3"></div>
+          <div class="col-md-6">
+            <div class="card" style="margin-top: 8%;">
+                <div class="card-header card-header-danger">
+                    <h4 class="card-title">{{ topic.title }}</h4>
+                    <p class="card-category">by {{ topic.user }}</p>
+                </div>
+                <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3" *ngFor="let post of topic.posts">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="card-title">{{ post.title }}</h4>
+                                        <p class="card-category">{{ post.text }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <mat-form-field class="example-full-width">
+                                  <input matInput placeholder="Title" [(ngModel)]="post.title" name="post.title" required>
+                                </mat-form-field>
+                                <mat-form-field class="example-full-width">
+                                    <input matInput placeholder="Post" [(ngModel)]="post.text" name="post.text" required>
+                                  </mat-form-field>
+                            </div>
+                            <div class="col-md-3">
+                                <button mat-raised-button type="submit" class="btn btn-danger" (click)="onPost(topic._id)">Post</button>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                </div>
+              </div>
+          </div>
+          </div>
+    </div>
+</div>

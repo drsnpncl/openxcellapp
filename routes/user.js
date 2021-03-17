@@ -80,6 +80,39 @@ router.get('/',
     }
 )
 
+router.post('/login',
+    body('username').not().isEmpty().withMessage('Username is required'),
+    body('password').not().isEmpty().withMessage('Password is required.'),
+    body('username').custom(value => {
+        return User.findByUsername(value).then(user => {
+          if (!user) {
+            return Promise.reject('User Not Found. Please register first');
+          }
+        });
+    }),
+	(req, res) => {
+        var errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			var errArray = '';
+			errors.array().forEach(err => {
+				errArray = errArray + err.msg + ' ';
+			});
+			return res.status(400).json({ status: 'failure', message: errArray });
+		} else {
+			
+            User.authenticate(req.body.username, req.body.password).then(user => {
+                if(user) {
+                    res.status(200).json(user)
+                } else {
+                    res.status(400).send('User not created')
+                }
+            }).catch(err => {
+                res.status(400).json(err)
+            })
+        }
+    }
+)
+
 router.post('/',
     body('username').not().isEmpty().withMessage('Username is required'),
     body('password').not().isEmpty().withMessage('Password is required.'),
