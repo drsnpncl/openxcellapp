@@ -3,7 +3,7 @@ const Post = require('../models/post')
 
 const findAll = async () => {
     try{
-        return await Post.find()
+        return await Post.find().populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }
@@ -11,7 +11,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try{
-        return await Post.findOne( { _id:  mongoose.Types.ObjectId(id) })
+        return await Post.findOne( { _id:  mongoose.Types.ObjectId(id) }).populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }
@@ -27,7 +27,7 @@ const findByUser = async (user) => {
 
 const findByTopic = async (topic) => {
     try{
-        return await Post.find({ topic:  mongoose.Types.ObjectId(topic) })
+        return await Post.find({ topic:  mongoose.Types.ObjectId(topic) }).populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }

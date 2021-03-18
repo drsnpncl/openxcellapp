@@ -3,7 +3,7 @@ const Comment = require('../models/comment')
 
 const findAll = async () => {
     try{
-        return await Comment.find()
+        return await Comment.find().populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }
@@ -27,7 +27,7 @@ const findByUser = async (user) => {
 
 const findByTopic = async (topic) => {
     try{
-        return await Comment.find({ topic:  mongoose.Types.ObjectId(topic) })
+        return await Comment.find({ topic:  mongoose.Types.ObjectId(topic) }).populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }
@@ -35,7 +35,7 @@ const findByTopic = async (topic) => {
 
 const findByPost = async (post) => {
     try {
-        return await Comment.find({ post:  mongoose.Types.ObjectId(post) })
+        return await Comment.find({ post:  mongoose.Types.ObjectId(post) }).populate('user', 'username')
     } catch (err) {
         return { message: err.message }
     }

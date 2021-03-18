@@ -3,7 +3,7 @@ const Topic = require('../models/topic')
 
 const findAll = async () => {
     try {
-        return await Topic.find()
+        return await Topic.find().populate('user', 'username')
     } catch(err) {
         return { message: err.message }
     }
@@ -11,7 +11,7 @@ const findAll = async () => {
 
 const findById = async (id) => {
     try {
-        return await Topic.findOne({ _id: mongoose.Types.ObjectId(id) })
+        return await Topic.findOne({ _id: mongoose.Types.ObjectId(id) }).populate('user', 'username')
     } catch(err) {
         return { message: err.message }
     }

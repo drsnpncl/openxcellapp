@@ -1,8 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var { body, validationResult  } = require('express-validator'); 
+var express = require('express')
+var router = express.Router()
+var { body, validationResult  } = require('express-validator')
 var passport = require('../passport')
 var Topic = require('../services/topic')
+var Post = require('../services/post')
+var Comment = require('../services/comment')
+var User = require('../services/user')
 
 router.get('/user/:id',
     passport.authenticate('basic', { session: false }),
@@ -24,6 +27,7 @@ router.get('/:id',
     (req, res) => {
         Topic.findById(req.params.id).then(topic => {
             if(topic) {
+                topic.user = topic.user.username;
                 res.status(200).json(topic)
             } else {
                 res.status(400).send('Topic not found')
