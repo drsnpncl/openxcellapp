@@ -83,7 +83,11 @@ export class TopicComponent implements OnInit {
         })
       }
     }, err => {
-      window.alert(err.error)
+      if(err.error.message){
+        window.alert(err.error.message)  
+      } else {
+        window.alert(err.error)
+      }
     })
   }
 
@@ -96,7 +100,11 @@ export class TopicComponent implements OnInit {
       this.post.text = '';
       this.post.topic = '';
     }, err => {
-      window.alert(err.error.message)
+      if(err.error.message){
+        window.alert(err.error.message)  
+      } else {
+        window.alert(err.error)
+      }
     });
     this.topicService.getAllTopics().subscribe(topics => { 
       this.topics = topics;
@@ -131,8 +139,11 @@ export class TopicComponent implements OnInit {
       this.comment.post = '';
       this.comment.text = '';
     }, err => {
-      console.log(JSON.stringify(err.error));
-      window.alert(err.error);
+      if(err.error.message){
+        window.alert(err.error.message)  
+      } else {
+        window.alert(err.error)
+      }
     });
     this.topicService.getAllTopics().subscribe(topics => { 
       this.topics = topics;
